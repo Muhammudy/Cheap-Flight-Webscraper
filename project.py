@@ -1307,21 +1307,22 @@ def get_full_airport_name(location):
 def search_google_flights(driver, departure, destination, departure_date, return_time):
     load_dotenv()
     options = Options()
-    options.binary_location = os.getenv('CHROME_PATH')
+    options.binary_location = os.getenv('CHROME_PATH')  # Ensure this points to your Chrome binary
+
+    # Headless mode and other options
     options.add_argument("--headless")
-    options.add_argument(f"user-agent={user_agent}")
     options.add_argument("--window-size=1656,1080")
     options.add_argument("--start-maximized")
 
-        # Initialize the driver with undetected_chromedriver
-    driver = uc.Chrome(options=options)
+    # Initialize WebDriver with undetected_chromedriver
+    driver = webdriver.Chrome(options=options)
 
     # Get a random user agent
     user_agent = get_random_user_agent()
-    options.add_argument(f"user-agent={user_agent}")
+    print(f"Using User-Agent: {user_agent}")
+        # Get a random user agent
 
     # Initialize the driver
-    driver = webdriver.Chrome(options=options)
     driver.maximize_window()
     driver.implicitly_wait(5)
     
