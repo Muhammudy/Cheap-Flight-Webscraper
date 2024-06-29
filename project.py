@@ -24,6 +24,8 @@ import cv2
 import numpy as np
 import mss
 import pyairports
+from dotenv import load_dotenv
+
 
 
 def start_recording(video_path):
@@ -326,6 +328,8 @@ def setup_stealth(driver):
 
 
 def roundTrip(driver, departure, ending, departure_date, returning_date):
+    load_dotenv()
+    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
     display = Display(visible=0, size=(1024, 768))
@@ -1299,6 +1303,8 @@ def get_full_airport_name(location):
     return location
 
 def search_google_flights(driver, departure, destination, departure_date, return_time):
+    load_dotenv()
+    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
     display = Display(visible=0, size=(1024, 768))
