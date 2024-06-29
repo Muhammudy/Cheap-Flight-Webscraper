@@ -329,7 +329,7 @@ def setup_stealth(driver):
 
 def roundTrip(driver, departure, ending, departure_date, returning_date):
     load_dotenv()
-    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
+    chromePath = os.getenv('CHROMEDRIVER_PATH')
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
 
@@ -340,13 +340,14 @@ def roundTrip(driver, departure, ending, departure_date, returning_date):
     # Configure Chrome options
     options = Options()
     options.binary_location = os.getenv('CHROME_PATH')
-    options.add_argument("--headless")  # Ensure headless mode
-    options.add_argument(f"user-agent={user_agent}")  # Set user agent
-    options.add_argument("--window-size=1656,1080")  # Adjust window size
-    options.add_argument("--start-maximized")  # Maximize window on start
+    options.add_argument("--headless")
+        # Uncomment and adjust other arguments as needed
+        # options.add_argument("--disable-gpu")
+        # options.add_argument("--no-sandbox")
+        # options.add_argument("--disable-dev-shm-usage")
 
-    # Initialize WebDriver with Chrome
-    driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
+        # Initialize the driver with undetected_chromedriver
+    driver = uc.Chrome(options=options)
 
 
 
@@ -1305,18 +1306,15 @@ def get_full_airport_name(location):
 
 def search_google_flights(driver, departure, destination, departure_date, return_time):
     load_dotenv()
-    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
-    user_agent = get_random_user_agent()
-    print(f"Using User-Agent: {user_agent}")
-
-    display = Display(visible=0, size=(1024, 768))
     options = Options()
     options.binary_location = os.getenv('CHROME_PATH')
     options.add_argument("--headless")
-    
+    options.add_argument(f"user-agent={user_agent}")
+    options.add_argument("--window-size=1656,1080")
+    options.add_argument("--start-maximized")
 
-       
-    driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
+        # Initialize the driver with undetected_chromedriver
+    driver = uc.Chrome(options=options)
 
     # Get a random user agent
     user_agent = get_random_user_agent()
