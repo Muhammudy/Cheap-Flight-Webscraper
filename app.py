@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime
 import csv
+from project import run_both_services
 
 load_dotenv()
 
@@ -32,6 +33,7 @@ def search():
     # Check if departure and destination are the same
     if departure.lower() == destination.lower():
         flash("Departure and destination cannot be the same.", 'error')
+        print("Error: Departure and destination cannot be the same.")
         return redirect(url_for("home"))
 
     try:
@@ -40,19 +42,23 @@ def search():
         return_date = datetime.strptime(return_date_str, "%Y-%m-%d")
     except ValueError:
         flash("Invalid date format. Please use YYYY-MM-DD.", 'error')
+        print("Error: Invalid date format.")
         return redirect(url_for("home"))
 
     # Check if departure and return dates are in the future
     if departure_date <= datetime.now() or return_date <= datetime.now():
         flash("Both departure and return dates must be in the future.", 'error')
+        print("Error: Dates must be in the future.")
         return redirect(url_for("home"))
 
     try:
-        from project import run_both_services
+        print("Starting to run scraping services...")
         run_both_services(departure, destination, departure_date_str, return_date_str)
         session['search_performed'] = True
+        print("Scraping services completed.")
     except Exception as e:
         flash(f"An error occurred: {e}", 'error')
+        print(f"Error during scraping: {e}")
         return redirect(url_for("home"))
 
     return redirect(url_for("results"))
@@ -71,23 +77,24 @@ def results():
             reader = csv.reader(file)
             expedia_data = list(reader)
     except FileNotFoundError:
-        pass
-
+        print("No data found for Expedia.")
+    
     try:
         with open("data2.csv", "r", newline='', encoding='utf-8') as file:
             reader = csv.reader(file)
             google_flights_data = list(reader)
     except FileNotFoundError:
-        pass
+        print("No data found for Google Flights.")
 
     try:
         open("data3.csv", "w").close()
         open("data2.csv", "w").close()
     except Exception as e:
         flash(f"An error occurred while wiping the data: {e}", 'error')
+        print(f"Error wiping data files: {e}")
         return redirect(url_for("home"))
 
     return render_template("results.html", expedia_data=expedia_data, google_flights_data=google_flights_data)
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
