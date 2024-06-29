@@ -9,4 +9,5 @@ pyvirtualdisplay==3.0
 opencv-python==4.5.5.64
 numpy==1.23.5
 mss==6.1.0
+pyairports
 
