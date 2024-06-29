@@ -4,7 +4,7 @@ import csv
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)  # Required for flashing messages
+app.secret_key = os.getenv("FLASK_SECRET_KEY")   # Required for flashing messages
 
 @app.route("/")
 def home():
