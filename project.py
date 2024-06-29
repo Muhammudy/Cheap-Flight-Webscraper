@@ -347,7 +347,7 @@ def roundTrip(driver, departure, ending, departure_date, returning_date):
         # options.add_argument("--disable-dev-shm-usage")
 
         # Initialize the driver with undetected_chromedriver
-    driver = uc.Chrome(options=options)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
 
 
@@ -1315,7 +1315,7 @@ def search_google_flights(driver, departure, destination, departure_date, return
     options.add_argument("--start-maximized")
 
     # Initialize WebDriver with undetected_chromedriver
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
     # Get a random user agent
     user_agent = get_random_user_agent()
