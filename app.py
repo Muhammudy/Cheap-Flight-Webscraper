@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from dotenv import load_dotenv
 import os
-import csv
 from datetime import datetime
+import csv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY")   # Required for flashing messages
+app.secret_key = os.getenv('SECRET_KEY')
 
 @app.route("/")
 def home():
@@ -45,11 +48,9 @@ def search():
         return redirect(url_for("home"))
 
     try:
-        # Import inside the function to avoid circular import
         from project import run_both_services
-        # Call the run_both_services function
         run_both_services(departure, destination, departure_date_str, return_date_str)
-        session['search_performed'] = True  # Set the flag to indicate a search was performed
+        session['search_performed'] = True
     except Exception as e:
         flash(f"An error occurred: {e}", 'error')
         return redirect(url_for("home"))
@@ -66,26 +67,19 @@ def results():
     google_flights_data = []
 
     try:
-        # Read Expedia data if the file exists
-        try:
-            with open("data3.csv", "r", newline='', encoding='utf-8') as file:
-                reader = csv.reader(file)
-                expedia_data = list(reader)
-        except FileNotFoundError:
-            pass  # If the file does not exist, keep the list empty
+        with open("data3.csv", "r", newline='', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            expedia_data = list(reader)
+    except FileNotFoundError:
+        pass
 
-        # Read Google Flights data if the file exists
-        try:
-            with open("data2.csv", "r", newline='', encoding='utf-8') as file:
-                reader = csv.reader(file)
-                google_flights_data = list(reader)
-        except FileNotFoundError:
-            pass  # If the file does not exist, keep the list empty
-    except Exception as e:
-        flash(f"An error occurred while reading the data: {e}", 'error')
-        return redirect(url_for("home"))
+    try:
+        with open("data2.csv", "r", newline='', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            google_flights_data = list(reader)
+    except FileNotFoundError:
+        pass
 
-    # Wipe the CSV files after reading the data
     try:
         open("data3.csv", "w").close()
         open("data2.csv", "w").close()
@@ -96,4 +90,4 @@ def results():
     return render_template("results.html", expedia_data=expedia_data, google_flights_data=google_flights_data)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
