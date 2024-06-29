@@ -328,7 +328,8 @@ def setup_stealth(driver):
 def roundTrip(driver, departure, ending, departure_date, returning_date):
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
-
+    display = Display(visible=0, size=(1024, 768))
+    display.start()
     options = uc.ChromeOptions()
     
     options.add_argument("--headless=new")
@@ -1284,6 +1285,7 @@ def roundTrip(driver, departure, ending, departure_date, returning_date):
 
     finally:
         driver.quit()
+        display.stop()
         print("closing expedia")
    
 
@@ -1299,6 +1301,9 @@ def get_full_airport_name(location):
 def search_google_flights(driver, departure, destination, departure_date, return_time):
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
+    display = Display(visible=0, size=(1024, 768))
+    display.start()
+    
     options = Options()
     options.add_argument("--headless")
     #options.add_argument("--disable-gpu")
@@ -1841,6 +1846,7 @@ def search_google_flights(driver, departure, destination, departure_date, return
 
     finally:
         driver.quit()
+        display.stop()
         print("closing the browser")           
 
 
