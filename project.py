@@ -335,6 +335,7 @@ def roundTrip(driver, departure, ending, departure_date, returning_date):
     display = Display(visible=0, size=(1024, 768))
     display.start()
     options = uc.ChromeOptions()
+    options.binary_location = os.getenv('CHROME_PATH')
     
     options.add_argument("--headless=new")
     options.add_argument(f"user-agent={user_agent}")
@@ -1311,6 +1312,7 @@ def search_google_flights(driver, departure, destination, departure_date, return
     display.start()
     
     options = Options()
+    options.binary_location = os.getenv('CHROME_PATH')
     options.add_argument("--headless")
     #options.add_argument("--disable-gpu")
     #options.add_argument("--no-sandbox")
