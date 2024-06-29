@@ -1310,17 +1310,12 @@ def search_google_flights(driver, departure, destination, departure_date, return
     print(f"Using User-Agent: {user_agent}")
 
     display = Display(visible=0, size=(1024, 768))
-    display.start()
-    print("im working?")
     options = Options()
     options.binary_location = os.getenv('CHROME_PATH')
     options.add_argument("--headless")
-    # Uncomment and adjust other arguments as needed
-    # options.add_argument("--disable-gpu")
-    # options.add_argument("--no-sandbox")
-    # options.add_argument("--disable-dev-shm-usage")
+    
 
-    # Initialize the driver with chromedriver_path and options
+       
     driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
 
     # Get a random user agent
