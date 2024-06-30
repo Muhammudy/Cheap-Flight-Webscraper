@@ -24,9 +24,6 @@ import cv2
 import numpy as np
 import mss
 import pyairports
-from dotenv import load_dotenv
-from selenium.webdriver.chrome.service import Service
-
 
 
 def start_recording(video_path):
@@ -329,41 +326,28 @@ def setup_stealth(driver):
 
 
 def roundTrip(driver, departure, ending, departure_date, returning_date):
-    print("Loading environment variables for Expedia...")
-    load_dotenv('C:\\PythonStuff\\.env')
-    
-    chrome_path = os.getenv('CHROME_PATH')
-    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
-    print(f"Chrome path: {chrome_path}")
-    print(f"ChromeDriver path: {chromedriver_path}")
-
-    if not chrome_path or not chromedriver_path:
-        print("Error: CHROME_PATH or CHROMEDRIVER_PATH not set.")
-        return
-
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
 
-    options = Options()
-    options.binary_location = chrome_path
-    options.add_argument("--no-sandbox")
-    options.add_argument("--headless")
-    print("Chrome options set.")
+    options = uc.ChromeOptions()
+    
+    options.add_argument("--headless=new")
+    options.add_argument(f"user-agent={user_agent}")
+    options.add_argument("--window-size=1656,1080")
+    options.add_argument("--start-maximized")
 
-    for attempt in range(3):
-        try:
-            print("Initializing WebDriver for Expedia...")
-            service = Service(chromedriver_path)
-            driver = webdriver.Chrome(service=service, options=options)
-            break
-        except WebDriverException as e:
-            print(f"Error initializing WebDriver for Expedia: {e}")
-            if attempt < 2:
-                print("Retrying...")
-                time.sleep(2)
-            else:
-                print("Failed to initialize WebDriver for Expedia after retries.")
+
+
+    driver = uc.Chrome(options=options, executable_path=ChromeDriverManager().install())
+
+
+
+
+
     # Apply stealth mode
+    setup_stealth(driver)
+
+    driver.implicitly_wait(5)
     
     driver.get("https://www.expedia.com/")
     print("im working")
@@ -1313,42 +1297,24 @@ def get_full_airport_name(location):
     return location
 
 def search_google_flights(driver, departure, destination, departure_date, return_time):
-    print("Loading environment variables for Google Flights...")
-    load_dotenv('C:\\PythonStuff\\.env')
-    
-    chrome_path = os.getenv('CHROME_PATH')
-    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
-    print(f"Chrome path: {chrome_path}")
-    print(f"ChromeDriver path: {chromedriver_path}")
-
-    if not chrome_path or not chromedriver_path:
-        print("Error: CHROME_PATH or CHROMEDRIVER_PATH not set.")
-        return
-
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
-
     options = Options()
-    options.binary_location = chrome_path
-    options.add_argument("--no-sandbox")
     options.add_argument("--headless")
-    print("Chrome options set.")
+    #options.add_argument("--disable-gpu")
+    #options.add_argument("--no-sandbox")
+    #options.add_argument("--disable-dev-shm-usage")
+
+    # Get a random user agent
+    user_agent = get_random_user_agent()
+    options.add_argument(f"user-agent={user_agent}")
+
+    # Initialize the driver
+    driver = webdriver.Chrome(options=options)
+    driver.maximize_window()
+    driver.implicitly_wait(5)
     
 
-    for attempt in range(3):
-        try:
-            print("Initializing WebDriver for Google Flights...")
-            service = Service(chromedriver_path)
-            driver = webdriver.Chrome(service=service, options=options)
-            break
-        except WebDriverException as e:
-            print(f"Error initializing WebDriver for Google Flights: {e}")
-            if attempt < 2:
-                print("Retrying...")
-                time.sleep(2)
-            else:
-                print("Failed to initialize WebDriver for Google Flights after retries.")
-                return
     
     try:
         driver.get("https://www.google.com/travel/flights?gl=US&hl=en-US")
