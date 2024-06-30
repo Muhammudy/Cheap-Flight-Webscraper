@@ -328,10 +328,10 @@ def setup_stealth(driver):
 
 
 
-def search_expedia(driver, departure, destination, departure_date, return_time):
+def roundTrip(driver, departure, ending, departure_date, returning_date):
     print("Loading environment variables for Expedia...")
     load_dotenv('C:\\PythonStuff\\.env')
-
+    
     chrome_path = os.getenv('CHROME_PATH')
     chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
     print(f"Chrome path: {chrome_path}")
@@ -346,17 +346,15 @@ def search_expedia(driver, departure, destination, departure_date, return_time):
 
     options = Options()
     options.binary_location = chrome_path
+    options.add_argument("--no-sandbox")
     options.add_argument("--headless")
-    options.add_argument("--window-size=1656,1080")
-    options.add_argument("--start-maximized")
     print("Chrome options set.")
 
     for attempt in range(3):
         try:
             print("Initializing WebDriver for Expedia...")
             service = Service(chromedriver_path)
-
-            driver = webdriver.Chrome(service=service, options=options)
+            driver = webdriver.Chrome('/opt/render/project/bin/chromedriver', options=options())
             break
         except WebDriverException as e:
             print(f"Error initializing WebDriver for Expedia: {e}")
@@ -365,10 +363,7 @@ def search_expedia(driver, departure, destination, departure_date, return_time):
                 time.sleep(2)
             else:
                 print("Failed to initialize WebDriver for Expedia after retries.")
-                return
-
-    driver.maximize_window()
-    driver.implicitly_wait(5)
+    # Apply stealth mode
     
     driver.get("https://www.expedia.com/")
     print("im working")
@@ -1335,17 +1330,17 @@ def search_google_flights(driver, departure, destination, departure_date, return
 
     options = Options()
     options.binary_location = chrome_path
+    options.add_argument("--no-sandbox")
     options.add_argument("--headless")
-    options.add_argument("--window-size=1656,1080")
-    options.add_argument("--start-maximized")
     print("Chrome options set.")
+    
 
     for attempt in range(3):
         try:
             print("Initializing WebDriver for Google Flights...")
             service = Service(chromedriver_path)
 
-            driver = webdriver.Chrome(service=service, options=options)
+            driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=options())
             break
         except WebDriverException as e:
             print(f"Error initializing WebDriver for Google Flights: {e}")
@@ -1355,15 +1350,6 @@ def search_google_flights(driver, departure, destination, departure_date, return
             else:
                 print("Failed to initialize WebDriver for Google Flights after retries.")
                 return
-
-    # Get a random user agent
-        # Get a random user agent
-
-    # Initialize the driver
-    driver.maximize_window()
-    driver.implicitly_wait(5)
-    
-
     
     try:
         driver.get("https://www.google.com/travel/flights?gl=US&hl=en-US")
