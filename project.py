@@ -327,7 +327,7 @@ def setup_stealth(driver):
 
 
 
-def roundTrip(departure, ending, departure_date, returning_date):
+def roundTrip(driver, departure, ending, departure_date, returning_date):
     load_dotenv()
     chrome_path = os.getenv('BINARY_LOCATION')
     chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
@@ -1302,7 +1302,7 @@ def get_full_airport_name(location):
             return airport.name
     return location
 
-def search_google_flights(departure, destination, departure_date, return_time):
+def search_google_flights(driver, departure, destination, departure_date, return_time):
     load_dotenv()
     chrome_path = os.getenv('BINARY_LOCATION')
     chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
