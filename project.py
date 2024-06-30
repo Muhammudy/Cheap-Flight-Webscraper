@@ -329,29 +329,33 @@ def setup_stealth(driver):
 
 
 def roundTrip(driver, departure, ending, departure_date, returning_date):
-    print("Loading environment variables for Expedia...")
-    load_dotenv('C:\\PythonStuff\\.env')
-    
-    chrome_path = os.getenv('CHROME_PATH')
-    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
-    print(f"Chrome path: {chrome_path}")
-    print(f"ChromeDriver path: {chromedriver_path}")
-
-    if not chrome_path or not chromedriver_path:
-        raise ValueError("CHROME_PATH or CHROMEDRIVER_PATH not set.")
-
-    user_agent = get_random_user_agent()
-    print(f"Using User-Agent: {user_agent}")
-
-    options = Options()
-    options.binary_location = chrome_path
-    options.add_argument("--window-size=1656,1080")
-    # options.add_argument("--headless")  # Uncomment for headless mode
-    
     try:
+        print("Loading environment variables for Expedia...")
+        load_dotenv('C:\\PythonStuff\\.env')
+        
+        chrome_path = os.getenv('CHROME_PATH')
+        chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
+        
+        if not chrome_path or not chromedriver_path:
+            raise ValueError("CHROME_PATH or CHROMEDRIVER_PATH not set.")
+        
+        print(f"Chrome path: {chrome_path}")
+        print(f"ChromeDriver path: {chromedriver_path}")
+        
+        user_agent = get_random_user_agent()
+        print(f"Using User-Agent: {user_agent}")
+        
+        options = Options()
+        options.binary_location = chrome_path
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--start-maximized")
+        
+        print("Chrome options set.")
         print("Initializing WebDriver for Expedia...")
-        driver = webdriver.Chrome(service=Service(chromedriver_path), options=options)
-        print("WebDriver initialized successfully.")
+        
+        service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=options)
     except Exception as e:
         print(f"Error initializing WebDriver for Expedia: {e}")
         return
@@ -1308,29 +1312,33 @@ def get_full_airport_name(location):
     return location
 
 def search_google_flights(driver, departure, destination, departure_date, return_time):
-    print("Loading environment variables for Google Flights...")
-    load_dotenv('C:\\PythonStuff\\.env')
-    
-    chrome_path = os.getenv('CHROME_PATH')
-    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
-    print(f"Chrome path: {chrome_path}")
-    print(f"ChromeDriver path: {chromedriver_path}")
-
-    if not chrome_path or not chromedriver_path:
-        raise ValueError("CHROME_PATH or CHROMEDRIVER_PATH not set.")
-
-    user_agent = get_random_user_agent()
-    print(f"Using User-Agent: {user_agent}")
-    
-    options = Options()
-    options.binary_location = chrome_path
-    options.add_argument("--window-size=1656,1080")
-    # options.add_argument("--headless")  # Uncomment for headless mode
-    
     try:
+        print("Loading environment variables for Google Flights...")
+        load_dotenv('C:\\PythonStuff\\.env')
+        
+        chrome_path = os.getenv('CHROME_PATH')
+        chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
+        
+        if not chrome_path or not chromedriver_path:
+            raise ValueError("CHROME_PATH or CHROMEDRIVER_PATH not set.")
+        
+        print(f"Chrome path: {chrome_path}")
+        print(f"ChromeDriver path: {chromedriver_path}")
+        
+        user_agent = get_random_user_agent()
+        print(f"Using User-Agent: {user_agent}")
+        
+        options = Options()
+        options.binary_location = chrome_path
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--start-maximized")
+        
+        print("Chrome options set.")
         print("Initializing WebDriver for Google Flights...")
-        driver = webdriver.Chrome(service=Service(chromedriver_path), options=options)
-        print("WebDriver initialized successfully.")
+        
+        service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=options)
     except Exception as e:
         print(f"Error initializing WebDriver for Google Flights: {e}")
         return
