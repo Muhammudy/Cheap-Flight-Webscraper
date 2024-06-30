@@ -329,24 +329,27 @@ def setup_stealth(driver):
 
 def roundTrip(driver, departure, ending, departure_date, returning_date):
     load_dotenv()
-    chromePath = os.getenv('CHROMEDRIVER_PATH')
+    
+    chrome_path = os.getenv('BINARY_LOCATION')
+    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
+    
+    if not chrome_path or not chromedriver_path:
+        print(f"BINARY_LOCATION: {chrome_path}, CHROMEDRIVER_PATH: {chromedriver_path}")
+        raise ValueError("BINARY_LOCATION or CHROMEDRIVER_PATH is not set.")
+    
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
 
-    # Start virtual display
     display = Display(visible=0, size=(1024, 768))
     display.start()
 
-    # Configure Chrome options
     options = Options()
-    options.binary_location = os.getenv('CHROME_PATH')
+    options.binary_location = chrome_path
     options.add_argument("--headless")
-    options.add_argument(f"user-agent={user_agent}")
     options.add_argument("--window-size=1656,1080")
-    options.add_argument("--start-maximized")
+    options.add_argument(f"user-agent={user_agent}")
 
-    # Initialize WebDriver with undetected_chromedriver
-    driver = uc.Chrome(options=options)
+    driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
 
     # Apply stealth mode
     setup_stealth(driver)
@@ -1302,21 +1305,25 @@ def get_full_airport_name(location):
 
 def search_google_flights(driver, departure, destination, departure_date, return_time):
     load_dotenv()
-    options = Options()
-    options.binary_location = os.getenv('CHROME_PATH')
+    
+    chrome_path = os.getenv('BINARY_LOCATION')
+    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
+    
+    if not chrome_path or not chromedriver_path:
+        print(f"BINARY_LOCATION: {chrome_path}, CHROMEDRIVER_PATH: {chromedriver_path}")
+        raise ValueError("BINARY_LOCATION or CHROMEDRIVER_PATH is not set.")
+    
+    user_agent = get_random_user_agent()
+    print(f"Using User-Agent: {user_agent}")
 
-    # Headless mode and other options
+    options = Options()
+    options.binary_location = chrome_path
     options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
     options.add_argument("--start-maximized")
-
-    # Get a random user agent
-    user_agent = get_random_user_agent()
-    print(f"Using User-Agent: {user_agent}")
     options.add_argument(f"user-agent={user_agent}")
 
-    # Initialize WebDriver with undetected_chromedriver
-    driver = uc.Chrome(options=options)
+    driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
 
     # Get a random user agent
     user_agent = get_random_user_agent()
