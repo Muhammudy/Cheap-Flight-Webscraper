@@ -330,10 +330,15 @@ def setup_stealth(driver):
 
 def roundTrip(driver, departure, ending, departure_date, returning_date):
     print("Loading environment variables...")
-    load_dotenv()
+    load_dotenv('PythonStuff/.env')
     
     chrome_path = os.getenv('CHROME_PATH')
+    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
     print(f"Chrome path: {chrome_path}")
+    print(f"Chromedriver path: {chromedriver_path}")
+    
+    if not chrome_path or not chromedriver_path:
+        raise ValueError("CHROME_PATH or CHROMEDRIVER_PATH is not set.")
     
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
@@ -341,9 +346,16 @@ def roundTrip(driver, departure, ending, departure_date, returning_date):
     options = Options()
     options.binary_location = chrome_path
     options.add_argument("--headless")
+    options.add_argument("--window-size=1656,1080")
+    options.add_argument("--start-maximized")
     
     print("Initializing WebDriver for Expedia...")
-    driver = uc.Chrome(options=options)
+    try:
+        driver = uc.Chrome(driver_executable_path=chromedriver_path, options=options)
+        print("WebDriver initialized successfully.")
+    except Exception as e:
+        print(f"Error initializing WebDriver: {e}")
+        raise
     
     # Apply stealth mode
     setup_stealth(driver)
@@ -1299,10 +1311,15 @@ def get_full_airport_name(location):
 
 def search_google_flights(driver, departure, destination, departure_date, return_time):
     print("Loading environment variables...")
-    load_dotenv()
+    load_dotenv('PythonStuff/.env')
     
     chrome_path = os.getenv('CHROME_PATH')
+    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
     print(f"Chrome path: {chrome_path}")
+    print(f"Chromedriver path: {chromedriver_path}")
+    
+    if not chrome_path or not chromedriver_path:
+        raise ValueError("CHROME_PATH or CHROMEDRIVER_PATH is not set.")
     
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
@@ -1314,7 +1331,12 @@ def search_google_flights(driver, departure, destination, departure_date, return
     options.add_argument("--start-maximized")
     
     print("Initializing WebDriver for Google Flights...")
-    driver = uc.Chrome(options=options)
+    try:
+        driver = uc.Chrome(driver_executable_path=chromedriver_path, options=options)
+        print("WebDriver initialized successfully.")
+    except Exception as e:
+        print(f"Error initializing WebDriver: {e}")
+        raise
     Display.start()
 
     # Get a random user agent
