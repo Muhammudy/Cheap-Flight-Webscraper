@@ -340,9 +340,10 @@ def roundTrip(driver, departure, ending, departure_date, returning_date):
     
     options = Options()
     options.binary_location = chrome_path
-    options.add_argument("--headless")
+    # Headless mode turned off for debugging
+    # options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
-    options.add_argument("--start-maximized")
+    options.add_argument(f"user-agent={user_agent}")
     
     print("Initializing WebDriver for Expedia...")
     try:
@@ -1316,9 +1317,10 @@ def search_google_flights(driver, departure, destination, departure_date, return
     
     options = Options()
     options.binary_location = chrome_path
-    options.add_argument("--headless")
+    # Headless mode turned off for debugging
+    # options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
-    options.add_argument("--start-maximized")
+    options.add_argument(f"user-agent={user_agent}")
     
     print("Initializing WebDriver for Google Flights...")
     try:
