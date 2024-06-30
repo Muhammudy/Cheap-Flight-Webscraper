@@ -329,27 +329,24 @@ def setup_stealth(driver):
 
 def roundTrip(driver, departure, ending, departure_date, returning_date):
     load_dotenv()
-    
-    chrome_path = os.getenv('BINARY_LOCATION')
-    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
-    
-    if not chrome_path or not chromedriver_path:
-        print(f"BINARY_LOCATION: {chrome_path}, CHROMEDRIVER_PATH: {chromedriver_path}")
-        raise ValueError("BINARY_LOCATION or CHROMEDRIVER_PATH is not set.")
-    
-    user_agent = get_random_user_agent()
-    print(f"Using User-Agent: {user_agent}")
-
-    display = Display(visible=0, size=(1024, 768))
-    display.start()
-
     options = Options()
-    options.binary_location = chrome_path
+    options.binary_location = os.getenv('BINARY_LOCATION')
+    
+    # Headless mode and other options
     options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
-    options.add_argument(f"user-agent={user_agent}")
+    options.add_argument("--start-maximized")
 
-    driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
+    # Get a random user agent
+    user_agent = get_random_user_agent()
+    options.add_argument(f"user-agent={user_agent}")
+    print(f"Using User-Agent: {user_agent}")
+    
+    # Initialize WebDriver with ChromeDriverManager
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    Display.start()
+
+    # Apply stealth mode
 
     # Apply stealth mode
     setup_stealth(driver)
@@ -1290,7 +1287,7 @@ def roundTrip(driver, departure, ending, departure_date, returning_date):
 
     finally:
         driver.quit()
-        display.stop()
+        Display.stop()
         print("closing expedia")
    
 
@@ -1305,25 +1302,22 @@ def get_full_airport_name(location):
 
 def search_google_flights(driver, departure, destination, departure_date, return_time):
     load_dotenv()
-    
-    chrome_path = os.getenv('BINARY_LOCATION')
-    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
-    
-    if not chrome_path or not chromedriver_path:
-        print(f"BINARY_LOCATION: {chrome_path}, CHROMEDRIVER_PATH: {chromedriver_path}")
-        raise ValueError("BINARY_LOCATION or CHROMEDRIVER_PATH is not set.")
-    
-    user_agent = get_random_user_agent()
-    print(f"Using User-Agent: {user_agent}")
-
     options = Options()
-    options.binary_location = chrome_path
+    options.binary_location = os.getenv('BINARY_LOCATION')
+    
+    # Headless mode and other options
     options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
     options.add_argument("--start-maximized")
-    options.add_argument(f"user-agent={user_agent}")
 
-    driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
+    # Get a random user agent
+    user_agent = get_random_user_agent()
+    options.add_argument(f"user-agent={user_agent}")
+    print(f"Using User-Agent: {user_agent}")
+    
+    # Initialize WebDriver with ChromeDriverManager
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    Display.start()
 
     # Get a random user agent
     user_agent = get_random_user_agent()
@@ -1861,7 +1855,7 @@ def search_google_flights(driver, departure, destination, departure_date, return
 
     finally:
         driver.quit()
-        display.stop()
+        Display.stop()
         print("closing the browser")           
 
 
