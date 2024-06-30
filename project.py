@@ -330,7 +330,7 @@ def setup_stealth(driver):
 
 def roundTrip(driver, departure, ending, departure_date, returning_date):
     print("Loading environment variables...")
-    load_dotenv()
+    load_dotenv('PythonStuff/.env')
     
     chrome_path = os.getenv('CHROME_PATH')
     print(f"Chrome path: {chrome_path}")
@@ -1306,7 +1306,7 @@ def get_full_airport_name(location):
 
 def search_google_flights(driver, departure, destination, departure_date, return_time):
     print("Loading environment variables...")
-    load_dotenv()
+    load_dotenv('PythonStuff/.env')
     
     chrome_path = os.getenv('CHROME_PATH')
     print(f"Chrome path: {chrome_path}")
