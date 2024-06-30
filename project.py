@@ -25,6 +25,7 @@ import numpy as np
 import mss
 import pyairports
 from dotenv import load_dotenv
+from selenium.webdriver.chrome.service import Service
 
 
 
@@ -327,28 +328,19 @@ def setup_stealth(driver):
 
 
 
-def roundTrip(driver, departure, ending, departure_date, returning_date):
+def roundTrip(departure, ending, departure_date, returning_date):
     load_dotenv()
-    chrome_path = os.getenv('BINARY_LOCATION')
-    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
-
-    if not chrome_path or not chromedriver_path:
-        print(f"BINARY_LOCATION: {chrome_path}, CHROMEDRIVER_PATH: {chromedriver_path}")
-        raise ValueError("BINARY_LOCATION or CHROMEDRIVER_PATH is not set.")
-
-    user_agent = get_random_user_agent()
-    print(f"Using User-Agent: {user_agent}")
-
-    display = Display(visible=0, size=(1024, 768))
-    display.start()
-
     options = Options()
-    options.binary_location = chrome_path
+    options.binary_location = os.getenv('CHROME_PATH')
     options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
     options.add_argument("--start-maximized")
 
-    driver = uc.Chrome(driver_executable_path=chromedriver_path, options=options)
+    user_agent = get_random_user_agent()
+    print(f"Using User-Agent: {user_agent}")
+    options.add_argument(f"user-agent={user_agent}")
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     # Apply stealth mode
     setup_stealth(driver)
@@ -1302,25 +1294,19 @@ def get_full_airport_name(location):
             return airport.name
     return location
 
-def search_google_flights(driver, departure, destination, departure_date, return_time):
+def search_google_flights(departure, destination, departure_date, return_time):
     load_dotenv()
-    chrome_path = os.getenv('BINARY_LOCATION')
-    chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
-
-    if not chrome_path or not chromedriver_path:
-        print(f"BINARY_LOCATION: {chrome_path}, CHROMEDRIVER_PATH: {chromedriver_path}")
-        raise ValueError("BINARY_LOCATION or CHROMEDRIVER_PATH is not set.")
-
-    user_agent = get_random_user_agent()
-    print(f"Using User-Agent: {user_agent}")
-
     options = Options()
-    options.binary_location = chrome_path
+    options.binary_location = os.getenv('CHROME_PATH')
     options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
     options.add_argument("--start-maximized")
 
-    driver = uc.Chrome(driver_executable_path=chromedriver_path, options=options)
+    user_agent = get_random_user_agent()
+    print(f"Using User-Agent: {user_agent}")
+    options.add_argument(f"user-agent={user_agent}")
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     Display.start()
 
     # Get a random user agent
