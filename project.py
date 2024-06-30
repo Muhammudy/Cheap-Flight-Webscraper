@@ -353,7 +353,7 @@ def roundTrip(driver, departure, destination, departure_date, returning_date):
     
     try:
         print("Initializing WebDriver for Expedia...")
-        driver = uc.Chrome(executable_path=chromedriver_path, options=options)
+        driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
     except Exception as e:
         print(f"Error initializing WebDriver for Expedia: {e}")
 
@@ -1337,7 +1337,7 @@ def search_google_flights(driver, departure, destination, departure_date, return
     
     try:
         print("Initializing WebDriver for Google Flights...")
-        driver = uc.Chrome(executable_path=chromedriver_path, options=options)
+        driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
     except Exception as e:
         print(f"Error initializing WebDriver for Google Flights: {e}")
     # Continue with the rest of the function logic
