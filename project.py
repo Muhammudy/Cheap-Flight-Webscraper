@@ -328,7 +328,7 @@ def setup_stealth(driver):
 
 
 
-def roundTrip(driver, departure, ending, departure_date, returning_date):
+def roundTrip(driver, departure, destination, departure_date, returning_date):
     print("Loading environment variables for Expedia...")
     load_dotenv('C:\\PythonStuff\\.env')
     
@@ -346,6 +346,7 @@ def roundTrip(driver, departure, ending, departure_date, returning_date):
     
     options = Options()
     options.binary_location = chrome_path
+    options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
     options.add_argument("--start-maximized")
     print("Chrome options set.")
@@ -1329,6 +1330,7 @@ def search_google_flights(driver, departure, destination, departure_date, return
     
     options = Options()
     options.binary_location = chrome_path
+    options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
     options.add_argument("--start-maximized")
     print("Chrome options set.")
