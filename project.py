@@ -328,7 +328,7 @@ def setup_stealth(driver):
 
 
 
-def roundTrip(driver, departure, destination, departure_date, returning_date):
+def roundTrip(driver, departure, ending, departure_date, returning_date):
     print("Loading environment variables for Expedia...")
     load_dotenv('C:\\PythonStuff\\.env')
     
@@ -336,29 +336,25 @@ def roundTrip(driver, departure, destination, departure_date, returning_date):
     chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
     print(f"Chrome path: {chrome_path}")
     print(f"ChromeDriver path: {chromedriver_path}")
-    
+
     if not chrome_path or not chromedriver_path:
-        print("Error: CHROME_PATH or CHROMEDRIVER_PATH not set.")
-        return
-    
+        raise ValueError("CHROME_PATH or CHROMEDRIVER_PATH not set.")
+
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
-    
+
     options = Options()
     options.binary_location = chrome_path
-    options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
-    options.add_argument("--start-maximized")
-    print("Chrome options set.")
+    # options.add_argument("--headless")  # Uncomment for headless mode
     
     try:
         print("Initializing WebDriver for Expedia...")
-        driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
+        driver = webdriver.Chrome(service=Service(chromedriver_path), options=options)
+        print("WebDriver initialized successfully.")
     except Exception as e:
         print(f"Error initializing WebDriver for Expedia: {e}")
-
-    # Continue with the rest of the function logic
-    print("Continuing with Expedia search...")
+        return
     
     # Apply stealth mode
     setup_stealth(driver)
@@ -1299,7 +1295,6 @@ def roundTrip(driver, departure, destination, departure_date, returning_date):
 
     finally:
         driver.quit()
-        Display.stop()
         print("closing expedia")
    
 
@@ -1320,29 +1315,25 @@ def search_google_flights(driver, departure, destination, departure_date, return
     chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
     print(f"Chrome path: {chrome_path}")
     print(f"ChromeDriver path: {chromedriver_path}")
-    
+
     if not chrome_path or not chromedriver_path:
-        print("Error: CHROME_PATH or CHROMEDRIVER_PATH not set.")
-        return
-    
+        raise ValueError("CHROME_PATH or CHROMEDRIVER_PATH not set.")
+
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
     
     options = Options()
     options.binary_location = chrome_path
-    options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
-    options.add_argument("--start-maximized")
-    print("Chrome options set.")
+    # options.add_argument("--headless")  # Uncomment for headless mode
     
     try:
         print("Initializing WebDriver for Google Flights...")
-        driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
+        driver = webdriver.Chrome(service=Service(chromedriver_path), options=options)
+        print("WebDriver initialized successfully.")
     except Exception as e:
         print(f"Error initializing WebDriver for Google Flights: {e}")
-    # Continue with the rest of the function logic
-    print("Continuing with Google Flights search...")
-    Display.start()
+        return
 
     # Get a random user agent
     user_agent = get_random_user_agent()
@@ -1880,7 +1871,6 @@ def search_google_flights(driver, departure, destination, departure_date, return
 
     finally:
         driver.quit()
-        Display.stop()
         print("closing the browser")           
 
 
