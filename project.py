@@ -328,10 +328,10 @@ def setup_stealth(driver):
 
 
 
-def roundTrip(driver, departure, ending, departure_date, returning_date):
+def search_expedia(driver, departure, destination, departure_date, return_time):
     print("Loading environment variables for Expedia...")
     load_dotenv('C:\\PythonStuff\\.env')
-    
+
     chrome_path = os.getenv('CHROME_PATH')
     chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
     print(f"Chrome path: {chrome_path}")
@@ -354,20 +354,20 @@ def roundTrip(driver, departure, ending, departure_date, returning_date):
     for attempt in range(3):
         try:
             print("Initializing WebDriver for Expedia...")
-            service = Service(executable_path=chromedriver_path)
+            service = Service(chromedriver_path)
+
             driver = webdriver.Chrome(service=service, options=options)
             break
         except WebDriverException as e:
             print(f"Error initializing WebDriver for Expedia: {e}")
             if attempt < 2:
                 print("Retrying...")
-                time.sleep(10)
+                time.sleep(2)
             else:
                 print("Failed to initialize WebDriver for Expedia after retries.")
                 return
-    
-    # Apply stealth mode
-    setup_stealth(driver)
+
+    driver.maximize_window()
     driver.implicitly_wait(5)
     
     driver.get("https://www.expedia.com/")
@@ -1343,7 +1343,8 @@ def search_google_flights(driver, departure, destination, departure_date, return
     for attempt in range(3):
         try:
             print("Initializing WebDriver for Google Flights...")
-            service = Service(executable_path=chromedriver_path)
+            service = Service(chromedriver_path)
+
             driver = webdriver.Chrome(service=service, options=options)
             break
         except WebDriverException as e:
