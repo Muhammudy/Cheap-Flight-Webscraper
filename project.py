@@ -329,19 +329,22 @@ def setup_stealth(driver):
 
 
 def roundTrip(driver, departure, ending, departure_date, returning_date):
+    print("Loading environment variables...")
     load_dotenv()
-    options = Options()
-    options.binary_location = os.getenv('CHROME_PATH')
-    options.add_argument("--headless")
-    options.add_argument("--window-size=1656,1080")
-    options.add_argument("--start-maximized")
-
+    
+    chrome_path = os.getenv('CHROME_PATH')
+    print(f"Chrome path: {chrome_path}")
+    
     user_agent = get_random_user_agent()
     print(f"Using User-Agent: {user_agent}")
-    options.add_argument(f"user-agent={user_agent}")
-
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-
+    
+    options = Options()
+    options.binary_location = chrome_path
+    options.add_argument("--headless")
+    
+    print("Initializing WebDriver for Expedia...")
+    driver = uc.Chrome(options=options)
+    
     # Apply stealth mode
     setup_stealth(driver)
     driver.implicitly_wait(5)
@@ -1295,18 +1298,23 @@ def get_full_airport_name(location):
     return location
 
 def search_google_flights(driver, departure, destination, departure_date, return_time):
+    print("Loading environment variables...")
     load_dotenv()
+    
+    chrome_path = os.getenv('CHROME_PATH')
+    print(f"Chrome path: {chrome_path}")
+    
+    user_agent = get_random_user_agent()
+    print(f"Using User-Agent: {user_agent}")
+    
     options = Options()
-    options.binary_location = os.getenv('CHROME_PATH')
+    options.binary_location = chrome_path
     options.add_argument("--headless")
     options.add_argument("--window-size=1656,1080")
     options.add_argument("--start-maximized")
-
-    user_agent = get_random_user_agent()
-    print(f"Using User-Agent: {user_agent}")
-    options.add_argument(f"user-agent={user_agent}")
-
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    
+    print("Initializing WebDriver for Google Flights...")
+    driver = uc.Chrome(options=options)
     Display.start()
 
     # Get a random user agent
